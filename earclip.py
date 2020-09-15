@@ -140,6 +140,33 @@ class EarClipTriangulation:
             det_sum += (point2.x - point1.x) * (point2.y + point1.y)
         return det_sum > 0
 
+    def get_ears(self, polygon_vertices):
+        """
+        Perform triangulation of a given polygon by clipping all ears and returns triangles polygon consists of.
+        :param polygon_vertices: array, size=(n, 2)
+        :return:
+        """
+        polygon = []
+        triangles = []
+        ear_triangles = []
+
+        if self.__is_clockwise(polygon):
+            polygon.reverse()
+
+        for point in polygon_vertices:
+            polygon.append(Point(point[0], point[1]))
+
+        for index, point in enumerate(polygon):
+            prev_point_index = index - 1
+            prev_point = polygon[prev_point_index]
+            next_point_index = (index + 1) % len(polygon)
+            next_point = polygon[next_point_index]
+
+            if self.__is_ear(prev_point, point, next_point, polygon):
+                triangle = Triangle(prev_point, point, next_point)
+                ear_triangles.append(triangle)
+        return ear_triangles
+            
     def triangulate(self, polygon_vertices):
         """
         Perform triangulation of a given polygon by clipping all ears and returns triangles polygon consists of.
