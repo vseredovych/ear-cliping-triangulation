@@ -116,6 +116,9 @@ class EarClipTriangulation:
         """
         Gives a positive triangle area if vertices are listed in counterclockwise
         and negative area if vertices are listed clockwise.
+                    | x1 y1 1 |
+        Area = .5 * | x2 y2 1 |
+                    | x3 y3 1 |
         :param p1, p2, p3: Point
         :return: float
         """
@@ -166,7 +169,13 @@ class EarClipTriangulation:
                 triangle = Triangle(prev_point, point, next_point)
                 ear_triangles.append(triangle)
         return ear_triangles
-            
+
+    def compute_triangles_area(self, triangles):
+        area = 0
+        for tr in triangles:
+            area += self.__triangle_area(tr.p1, tr.p2, tr.p3)
+        return area
+
     def triangulate(self, polygon_vertices):
         """
         Perform triangulation of a given polygon by clipping all ears and returns triangles polygon consists of.
@@ -176,12 +185,16 @@ class EarClipTriangulation:
         polygon = []
         triangles = []
         ear_triangles = []
+        polygon_vertices = polygon_vertices
 
         if self.__is_clockwise(polygon):
             polygon.reverse()
 
         for point in polygon_vertices:
             polygon.append(Point(point[0], point[1]))
+
+        if polygon[0] == polygon[-1]:
+            polygon.pop(-1)
 
         for index, point in enumerate(polygon):
             prev_point_index = index - 1

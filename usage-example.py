@@ -48,7 +48,6 @@ def _ear_clipping_animation(polygon, triangles):
     plt.show()
 
 
-# example1
 n = 20
 x = np.linspace(-10, 10, num=n)
 y_top = np.sqrt(100 - x**2)
@@ -57,7 +56,7 @@ y_bot = -np.sqrt(100 - x**2)
 xx = np.concatenate((np.flip(x)[:-1], x[:-1]))
 yy = np.concatenate((y_top[:-1], y_bot[:-1]))
 my_polygon = [[x,y] for x, y in zip(xx, yy)]
-
+#
 earclip = EarClipTriangulation()
 triangles = earclip.triangulate(my_polygon)
 _ear_clipping_animation(my_polygon, triangles)
@@ -73,4 +72,3 @@ _ear_clipping_animation(my_polygon, triangles)
 # earclip = EarClipTriangulation()
 # triangles = earclip.triangulate(fig)
 # _ear_clipping_animation(fig, triangles)
-
